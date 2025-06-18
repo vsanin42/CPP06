@@ -6,7 +6,7 @@
 /*   By: vsanin <vsanin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 20:51:05 by vsanin            #+#    #+#             */
-/*   Updated: 2025/06/17 20:58:50 by vsanin           ###   ########.fr       */
+/*   Updated: 2025/06/18 16:00:30 by vsanin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,18 @@
 
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include <iomanip>
+#include <limits>
+#include <cmath>
+enum LitType {
+	CHAR,
+	INT,
+	FLOAT,
+	DOUBLE,
+	PSEUDO,
+	NONE
+};
 
 class ScalarConverter
 {
