@@ -6,7 +6,7 @@
 /*   By: vsanin <vsanin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 20:51:05 by vsanin            #+#    #+#             */
-/*   Updated: 2025/06/18 16:00:30 by vsanin           ###   ########.fr       */
+/*   Updated: 2025/06/18 20:58:05 by vsanin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,14 @@
 #include <iomanip>
 #include <limits>
 #include <cmath>
+#include <cerrno>
+
 enum LitType {
 	CHAR,
 	INT,
 	FLOAT,
 	DOUBLE,
-	PSEUDO,
+	OVERFLOW,
 	NONE
 };
 

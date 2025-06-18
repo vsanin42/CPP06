@@ -6,7 +6,7 @@
 /*   By: vsanin <vsanin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 20:51:12 by vsanin            #+#    #+#             */
-/*   Updated: 2025/06/18 17:53:36 by vsanin           ###   ########.fr       */
+/*   Updated: 2025/06/18 21:39:09 by vsanin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,22 @@ static LitType detectType(const std::string& lit)
 	return NONE;
 }
 
+static int getPrecision(const std::string& lit)
+{
+	size_t i = 0;
+	int count = 0;
+	
+	while (lit[i] != '.')
+		i++;
+	i++;
+	while (i < lit.size() && lit[i] != 'f')
+	{
+		count++;
+		i++;	
+	}
+	return count;
+}
+
 static void displayChar(const std::string& lit)
 {
 	std::cout << "Detected type: char\n" << std::endl;
@@ -86,15 +102,35 @@ static void displayChar(const std::string& lit)
 static void displayInt(const std::string& lit)
 {
 	std::cout << "Detected type: int\n" << std::endl;
-	int i = std::atoi(lit.c_str());
-	if (std::isprint(i))
-		std::cout << "char: '" << static_cast<char>(i) << "'" << std::endl;
+
+	char *end;
+	errno = 0;
+	long long testI = std::strtoll(lit.c_str(), &end, 10);
+	if (testI > std::numeric_limits<int>::max() || testI < std::numeric_limits<int>::min() || errno == ERANGE)
+	{
+		std::cout << "char: impossible" << std::endl;
+		std::cout << "int: overflow" << std::endl;
+		std::cout << "float: n/a" << std::endl;
+		std::cout << "double: n/a" << std::endl;
+	}
 	else
-		std::cout << "char: Non-displayable" << std::endl;
-	std::cout << std::fixed << std::setprecision(1);
-	std::cout << "int: " << i << std::endl;
-	std::cout << "float: " << static_cast<float>(i) << "f" << std::endl;	
-	std::cout << "double: " << static_cast<double>(i) << std::endl;
+	{
+		int i = std::atoi(lit.c_str());
+	
+		if (lit == "nanf" || lit == "+inff" || lit == "-inff" || std::isinf(i) || std::isnan(i)) // extra?
+			std::cout << "char: impossible" << std::endl;
+		else if (i >= 32 && i <= 126)
+			std::cout << "char: '" << static_cast<char>(i) << "'" << std::endl;
+		else if ((i >= 0 && i <= 31) || i == 127)
+			std::cout << "char: non-displayable" << std::endl;
+		else
+			std::cout << "char: impossible" << std::endl;
+		
+		std::cout << std::fixed << std::setprecision(1);
+		std::cout << "int: " << i << std::endl;
+		std::cout << "float: " << static_cast<float>(i) << "f" << std::endl;	
+		std::cout << "double: " << static_cast<double>(i) << std::endl;
+	}
 }
 
 static void displayFloat(const std::string& lit)
@@ -112,20 +148,26 @@ static void displayFloat(const std::string& lit)
 	else
 		f = static_cast<float>(std::atof(lit.c_str()));
 
-	if (lit == "nanf" || lit == "+inff" || lit == "-inff")
+	if (lit == "nanf" || lit == "+inff" || lit == "-inff" || std::isinf(f) || std::isnan(f)) // extra?
 		std::cout << "char: impossible" << std::endl;
-	else if (std::isprint(static_cast<int>(f)))
+	else if (f >= 32 && f <= 126)
 		std::cout << "char: '" << static_cast<char>(f) << "'" << std::endl;
+	else if ((f >= 0 && f <= 31) || f == 127)
+		std::cout << "char: non-displayable" << std::endl;
 	else
-		std::cout << "char: Non-displayable" << std::endl;
+		std::cout << "char: impossible" << std::endl;
 	
-	std::cout << std::fixed << std::setprecision(1);
+	int precision = getPrecision(lit);
+
+	std::cout << std::fixed << std::setprecision(precision);
 
 	if (lit == "nanf" || lit == "+inff" || lit == "-inff")
 		std::cout << "int: impossible" << std::endl;
+	else if (f < std::numeric_limits<int>::min() || f > std::numeric_limits<int>::max())
+		std::cout << "int: overflow" << std::endl;
 	else
 		std::cout << "int: " << static_cast<int>(f) << std::endl;
-	std::cout << "float: " << f << "f" << std::endl;	
+	std::cout << "float: " << f << "f" << std::endl;
 	std::cout << "double: " << static_cast<double>(f) << std::endl;
 }
 
@@ -144,19 +186,26 @@ static void displayDouble(const std::string& lit)
 	else
 		d = static_cast<double>(std::atof(lit.c_str()));
 	
-	if (lit == "nan" || lit == "+inf" || lit == "-inf")
+	if (lit == "nan" || lit == "+inf" || lit == "-inf"  || std::isinf(d) || std::isnan(d)) // extra?
 		std::cout << "char: impossible" << std::endl;
-	else if (std::isprint(static_cast<int>(d)))
+	else if (d >= 32 && d <= 126)
 		std::cout << "char: '" << static_cast<char>(d) << "'" << std::endl;
+	else if ((d >= 0 && d <= 31) || d == 127)
+		std::cout << "char: non-displayable" << std::endl;
 	else
-		std::cout << "char: Non-displayable" << std::endl;
+		std::cout << "char: impossible" << std::endl;
 	
-	std::cout << std::fixed << std::setprecision(1);
+	int precision = getPrecision(lit);
+	
+	std::cout << std::fixed << std::setprecision(precision);
 
 	if (lit == "nan" || lit == "+inf" || lit == "-inf")
 		std::cout << "int: impossible" << std::endl;
+	else if (d < std::numeric_limits<int>::min() || d > std::numeric_limits<int>::max())
+		std::cout << "int: overflow" << std::endl;
 	else
 		std::cout << "int: " << static_cast<int>(d) << std::endl;
+
 	std::cout << "float: " << static_cast<float>(d) << "f" << std::endl;	
 	std::cout << "double: " << d << std::endl;
 }
