@@ -6,7 +6,7 @@
 /*   By: vsanin <vsanin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 20:51:12 by vsanin            #+#    #+#             */
-/*   Updated: 2025/06/19 12:42:31 by vsanin           ###   ########.fr       */
+/*   Updated: 2025/06/19 13:30:53 by vsanin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ static LitType detectType(const std::string& lit)
 	}
 	
 	if ((dotFlag > 1 || fFlag > 1)
-		|| (dotFlag == 1 && (lit[0] == '.' || lit[i - 1] == '.'))
 		|| (fFlag == 1 && lit[i - 1] != 'f'))
 		return NONE;
 

@@ -6,7 +6,7 @@
 /*   By: vsanin <vsanin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:06:04 by vsanin            #+#    #+#             */
-/*   Updated: 2025/06/19 12:29:50 by vsanin           ###   ########.fr       */
+/*   Updated: 2025/06/19 13:32:55 by vsanin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ static int getPrecision(const std::string& lit)
 		count++;
 		i++;	
 	}
+	if (count == 0)
+		count += 1;
 	return count;
 }
 
