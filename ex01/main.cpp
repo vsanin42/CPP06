@@ -6,7 +6,7 @@
 /*   By: vsanin <vsanin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 21:24:01 by vsanin            #+#    #+#             */
-/*   Updated: 2025/06/19 17:06:27 by vsanin           ###   ########.fr       */
+/*   Updated: 2025/06/19 17:17:42 by vsanin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,8 @@ int main(void)
 	
 	Data* deserialized = Serializer::deserialize(serialized);
 	std::cout << "Deserialized pointer: \t" << deserialized << std::endl;
+
+	std::cout << "Final struct member 1:\t" << deserialized->member1 << std::endl;
+	std::cout << "Final struct member 2:\t" << deserialized->member2 << std::endl;
 	return 0;
 }
