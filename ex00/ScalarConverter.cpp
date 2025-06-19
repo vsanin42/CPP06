@@ -6,7 +6,7 @@
 /*   By: vsanin <vsanin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 20:51:12 by vsanin            #+#    #+#             */
-/*   Updated: 2025/06/19 17:12:45 by vsanin           ###   ########.fr       */
+/*   Updated: 2025/06/19 20:45:51 by vsanin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static LitType detectType(const std::string& lit)
 		return NONE;
 	}
 
-	if (lit[j] == '-')
+	if (lit[j] == '-' || lit[j] == '+')
 		j += 1;
 
 	for (i = j; i < lit.size(); i++)
