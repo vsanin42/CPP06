@@ -10,14 +10,14 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = convert
+NAME = converter
 
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 RM = rm -f
 
-HEADERS = ScalarConverter.hpp
-SRC = main.cpp ScalarConverter.cpp
+HEADERS = ScalarConverter.hpp ScalarUtils.hpp
+SRC = main.cpp ScalarConverter.cpp ScalarUtils.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
