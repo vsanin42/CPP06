@@ -6,7 +6,7 @@
 /*   By: vsanin <vsanin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 18:21:45 by vsanin            #+#    #+#             */
-/*   Updated: 2025/06/19 19:17:45 by vsanin           ###   ########.fr       */
+/*   Updated: 2025/06/20 18:43:05 by vsanin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,12 @@ void identify(Base* p)
 	
 	if (ptrA)
 		std::cout << "ID by pointer:\t\ttype A" << std::endl;
-	if (ptrB)
+	else if (ptrB)
 		std::cout << "ID by pointer:\t\ttype B" << std::endl;
-	if (ptrC)
+	else if (ptrC)
 		std::cout << "ID by pointer:\t\ttype C" << std::endl;
+	else
+		std::cout << "ID by pointer:\t\tBase" << std::endl;
 }
 
 void identify(Base& p)
@@ -53,25 +55,20 @@ void identify(Base& p)
 		std::cout << "ID by reference:\ttype A" << std::endl;
 		(void)refA;
 		return ;
-	} catch (const std::exception& e) {
-		std::cout << "ID by reference:\tNOT  A (" << e.what() << ")" << std::endl;
-	}
+	} catch (...) {}
 
 	try {
 		B& refB = dynamic_cast<B&>(p);
 		std::cout << "ID by reference:\ttype B" << std::endl;
 		(void)refB;
 		return ;
-	} catch (const std::exception& e) {
-		std::cout << "ID by reference:\tNOT  B (" << e.what() << ")" << std::endl;
-	}
+	} catch (...) {}
 
 	try {
 		C& refC = dynamic_cast<C&>(p);
 		std::cout << "ID by reference:\ttype C" << std::endl;
 		(void)refC;
 		return ;
-	} catch (const std::exception& e) {
-		std::cout << "ID by reference:\tNOT  C (" << e.what() << ")" << std::endl;
-	}
+	} catch (...) {}
+	std::cout << "ID by reference:\tBase" << std::endl;
 }
