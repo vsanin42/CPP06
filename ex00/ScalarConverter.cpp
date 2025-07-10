@@ -6,7 +6,7 @@
 /*   By: vsanin <vsanin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 20:51:12 by vsanin            #+#    #+#             */
-/*   Updated: 2025/06/19 20:45:51 by vsanin           ###   ########.fr       */
+/*   Updated: 2025/07/10 13:51:54 by vsanin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static LitType detectType(const std::string& lit)
 	if (lit == "nan" || lit == "+inf" || lit == "-inf")
 		return DOUBLE;
 
+	if (lit.size() == 0)
+		return NONE;
 	if (lit.size() == 1)
 	{
 		if (std::isdigit(lit[0]))

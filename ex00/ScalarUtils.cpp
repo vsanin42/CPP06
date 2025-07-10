@@ -6,7 +6,7 @@
 /*   By: vsanin <vsanin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 12:06:04 by vsanin            #+#    #+#             */
-/*   Updated: 2025/06/19 13:32:55 by vsanin           ###   ########.fr       */
+/*   Updated: 2025/07/10 14:25:29 by vsanin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,14 @@
 #include <iomanip>
 #include <limits>
 #include <cerrno>
+#include <cmath>
 
 static int getPrecision(const std::string& lit)
 {
 	size_t i = 0;
 	int count = 0;
-	
-	while (lit[i] != '.')
+
+	while (i < lit.size() && lit[i] != '.')
 		i++;
 	i++;
 	while (i < lit.size() && lit[i] != 'f')
@@ -48,9 +49,9 @@ static void formatInt(const std::string& lit, double num)
 
 static void formatChar(double num)
 {
-	if (num >= 32 && num <= 126)
+	if (num >= 32 && num <= 126 && std::floor(num) == num)
 		std::cout << "char: '" << static_cast<char>(num) << "'" << std::endl;
-	else if ((num >= 0 && num <= 31) || num == 127)
+	else if (((num >= 0 && num <= 31) || num == 127) && std::floor(num) == num)
 		std::cout << "char: non-displayable" << std::endl;
 	else
 		std::cout << "char: impossible" << std::endl;
@@ -72,10 +73,9 @@ void displayInt(const std::string& lit)
 {
 	std::cout << "Detected type: int\n" << std::endl;
 
-	char *end;
 	errno = 0;
-	long long testI = std::strtoll(lit.c_str(), &end, 10);
-	if (testI > std::numeric_limits<int>::max() || testI < std::numeric_limits<int>::min() || errno == ERANGE)
+	long long test = std::strtoll(lit.c_str(), NULL, 10);
+	if (test > std::numeric_limits<int>::max() || test < std::numeric_limits<int>::min() || errno == ERANGE)
 	{
 		std::cout << "char: impossible" << std::endl;
 		std::cout << "int: overflow" << std::endl;
@@ -84,7 +84,7 @@ void displayInt(const std::string& lit)
 	}
 	else
 	{
-		int i = std::atoi(lit.c_str());
+		int i = static_cast<int>(test);
 		formatChar(static_cast<double>(i));
 
 		std::cout << std::fixed << std::setprecision(1);
@@ -101,19 +101,18 @@ void displayFloat(const std::string& lit)
 	float f;
 
 	if (lit == "nanf")
-		f = std::numeric_limits<double>::quiet_NaN();
+		f = std::numeric_limits<float>::quiet_NaN();
 	else if (lit == "+inff")
-		f = static_cast<float>(std::numeric_limits<double>::infinity());
+		f = std::numeric_limits<float>::infinity();
 	else if (lit == "-inff")
-		f = static_cast<float>(-(std::numeric_limits<double>::infinity()));
+		f = -(std::numeric_limits<float>::infinity());
 	else
 		f = static_cast<float>(std::atof(lit.c_str()));
 
 	formatChar(static_cast<double>(f));
 	formatInt(lit, static_cast<double>(f));
-	
-	int precision = getPrecision(lit);
-	std::cout << std::fixed << std::setprecision(precision);
+
+	std::cout << std::fixed << std::setprecision(getPrecision(lit));
 	std::cout << "float: " << f << "f" << std::endl;
 	std::cout << "double: " << static_cast<double>(f) << std::endl;
 }
@@ -136,8 +135,7 @@ void displayDouble(const std::string& lit)
 	formatChar(d);
 	formatInt(lit, d);
 
-	int precision = getPrecision(lit);
-	std::cout << std::fixed << std::setprecision(precision);
+	std::cout << std::fixed << std::setprecision(getPrecision(lit));
 	std::cout << "float: " << static_cast<float>(d) << "f" << std::endl;	
 	std::cout << "double: " << d << std::endl;
 }
